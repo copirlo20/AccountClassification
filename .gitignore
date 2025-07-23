@@ -1,4 +1,5 @@
 .conda/
+__pycache__/
 cresci-2015/E13/tweets.csv
 cresci-2015/FSF/tweets.csv
 cresci-2015/INT/tweets.csv
