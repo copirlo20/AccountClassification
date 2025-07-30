@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Dự đoán tài khoản Twitter</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                padding: 20px;
+            }
+            label {
+                display: block;
+                margin-top: 10px;
+                font-weight: bold;
+            }
+            input {
+                width: 100%;
+                padding: 8px;
+                margin-top: 5px;
+                box-sizing: border-box;
+            }
+            button {
+                margin-top: 20px;
+                padding: 10px 20px;
+                font-size: 16px;
+            }
+            #result {
+                margin-top: 20px;
+                font-size: 18px;
+                color: green;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Dự đoán tài khoản Twitter (Fake/Real)</h2>
+        <label>Statuses Count</label>
+        <input type="number" id="statuses_count" value="0">
+        <label>Followers Count</label>
+        <input type="number" id="followers_count" value="0">
+        <label>Friends Count</label>
+        <input type="number" id="friends_count" value="0">
+        <label>Favourites Count</label>
+        <input type="number" id="favourites_count" value="0">
+        <label>Listed Count</label>
+        <input type="number" id="listed_count" value="0">
+        <label>Language</label>
+        <input type="text" id="lang" value="NaN">
+        <label>Time Zone</label>
+        <input type="text" id="time_zone" value="NaN">
+        <label>Location</label>
+        <input type="text" id="location" value="NaN">
+        <button onclick="sendRequest()">Gửi yêu cầu</button>
+        <div id="result">Kết quả: </div>
+        <script src="render.js"></script>
+    </body>
+</html>
