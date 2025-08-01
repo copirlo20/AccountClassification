@@ -62,4 +62,4 @@ class Predictions:
         self.load_model()
         with torch.no_grad():
             out = self.model(self.graph.x, self.graph.edge_index)
-            return out.argmax(dim=1).numpy()
+            return torch.softmax(out, dim=1)

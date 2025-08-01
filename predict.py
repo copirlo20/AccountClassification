@@ -10,7 +10,7 @@ def accuracy(predict, graph):
 
 # Hàm vẽ biểu đồ confusion matrix
 def chart(predictions, name, color, index):
-    results = predictions.predict()
+    results = predictions.predict().argmax(dim=1).numpy()
     cm = confusion_matrix(predictions.graph.y.numpy(), results)
     class_names = ['Real', 'Fake']
     plt.subplot(2, 3, index)

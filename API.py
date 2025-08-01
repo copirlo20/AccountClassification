@@ -22,6 +22,11 @@ def predict(user: UserInput):
     users = load_users(input=user.dict())
     graph = FriendGraphBuilder(users).build_graph()
     prediction = Predictions(model, './model/GCN.pth', graph).predict()[-1]
-    return {"prediction": "Fake" if prediction == 1 else "Real"}
-    
+    label = prediction.argmax()
+    confidence = prediction.max().item()
+    return {
+        "prediction": "Fake" if label == 1 else "Real",
+        "confidence": confidence
+    }
+
 # uvicorn API:API --reload

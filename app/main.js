@@ -3,16 +3,17 @@ const path = require('path');
 
 function createWindow() {
     const win = new BrowserWindow({
-        width: 600,
-        height: 850,
+        width: 500,
+        height: 586,
+        maximizable: false,
+        resizable: false,
+        fullscreenable: false,
         webPreferences: {
             preload: path.join(__dirname, 'render.js'),
             contextIsolation: false,
             nodeIntegration: true
-            }
         }
-    );
+    });
     win.loadFile('index.html');
 }
-
 app.whenReady().then(createWindow);
