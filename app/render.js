@@ -1,28 +1,54 @@
 const axios = require('axios');
 
-async function sendRequest() {
-    const payload = {
-        statuses_count: parseInt(document.getElementById('statuses_count').value),
-        followers_count: parseInt(document.getElementById('followers_count').value),
-        friends_count: parseInt(document.getElementById('friends_count').value),
-        favourites_count: parseInt(document.getElementById('favourites_count').value),
-        listed_count: parseInt(document.getElementById('listed_count').value),
-        lang: (document.getElementById('lang').value ?? "").trim() || "NaN",
-        time_zone: (document.getElementById('time_zone').value ?? "").trim() || "NaN",
-        location: (document.getElementById('location').value ?? "").trim() || "NaN"
-    };
-
-    const resultEl = document.getElementById('result');
-    const loadingEl = document.getElementById('loading');
-    resultEl.innerText = "";
-    loadingEl.style.display = 'flex';
-
+async function checkUser() {
+    const userId = document.getElementById('user_id').value.trim();
+    if (!userId) return alert("Please enter a user ID");
+    document.getElementById('loading').style.display = 'flex';
+    document.getElementById('info').style.display = 'none';
     try {
-        const res = await axios.post('http://localhost:8000/predict', payload);
-        resultEl.innerText = `Result: ${res.data.prediction} - ${(res.data.confidence * 100).toFixed(2)}%`;
-    } catch (err) {
-        resultEl.innerText = `Error: ${err.message}`;
+        const userRes = await axios.get(`http://localhost:8000/user/${userId}`);
+        const userData = userRes.data;
+        if (!userData || Object.keys(userData).length === 0) {
+            alert("User not found.");
+            return;
+        }
+        document.getElementById('statuses_count').value = userData.statuses_count || 0;
+        document.getElementById('followers_count').value = userData.followers_count || 0;
+        document.getElementById('friends_count').value = userData.friends_count || 0;
+        document.getElementById('favourites_count').value = userData.favourites_count || 0;
+        document.getElementById('listed_count').value = userData.listed_count || 0;
+        document.getElementById('lang').value = userData.lang || '';
+        document.getElementById('time_zone').value = userData.time_zone || '';
+        document.getElementById('location').value = userData.location || '';
+
+        const friendsRes = await axios.get(`http://localhost:8000/friends/${userId}`);
+        const friendsData = friendsRes.data;
+        const friendsList = friendsData.friends || [];
+        document.getElementById('friends_list').value = friendsList.join(', ') || 'No friends found';
+        document.getElementById('info').style.display = 'block';
+
+        const fullList = [parseInt(userId), ...friendsList];
+        const predictRes = await axios.post(`http://localhost:8000/predict`, {
+            users_id: fullList
+        });
+        const { prediction, confidence } = predictRes.data;
+        showPredictionResult(prediction, confidence);
+    } catch (error) {
+        console.error(error);
+        alert("Something went wrong.");
     } finally {
-        loadingEl.style.display = 'none';
+        document.getElementById('loading').style.display = 'none';
     }
+}
+
+function showPredictionResult(prediction, confidence) {
+    const resultDiv = document.getElementById('result');
+    resultDiv.style.display = 'block';
+    resultDiv.classList.remove('result-real', 'result-fake');
+    if (prediction.toLowerCase() === 'real') {
+        resultDiv.classList.add('result-real');
+    } else if (prediction.toLowerCase() === 'fake') {
+        resultDiv.classList.add('result-fake');
+    }
+    resultDiv.innerHTML = `<strong>Prediction:</strong> ${prediction} - ${confidence}`;
 }

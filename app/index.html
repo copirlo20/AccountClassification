@@ -9,45 +9,31 @@
         <div class="container">
             <h2>Twitter Checker</h2>
             <form id="form">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="statuses_count">Statuses</label>
-                        <input type="number" id="statuses_count" value="0">
-                    </div>
-                    <div class="form-group">
-                        <label for="followers_count">Followers</label>
-                        <input type="number" id="followers_count" value="0">
-                    </div>
-                    <div class="form-group">
-                        <label for="friends_count">Friends</label>
-                        <input type="number" id="friends_count" value="0">
-                    </div>
-                    <div class="form-group">
-                        <label for="favourites_count">Favourites</label>
-                        <input type="number" id="favourites_count" value="0">
-                    </div>
-                    <div class="form-group">
-                        <label for="listed_count">Listed</label>
-                        <input type="number" id="listed_count" value="0">
-                    </div>
-                    <div class="form-group">
-                        <label for="lang">Language</label>
-                        <input type="text" id="lang" placeholder="en, vi...">
-                    </div>
-                    <div class="form-group">
-                        <label for="time_zone">Time Zone</label>
-                        <input type="text" id="time_zone" placeholder="UTC, PST...">
-                    </div>
-                    <div class="form-group">
-                        <label for="location">Location</label>
-                        <input type="text" id="location" placeholder="Vietnam, USA...">
-                    </div>
+                <div class="form-group">
+                    <label for="user_id">User ID</label>
+                    <input type="text" id="user_id" placeholder="Enter Twitter user ID">
+                    <button type="button" onclick="checkUser()">OK</button>
                 </div>
-                <button type="button" onclick="sendRequest()">Send Request</button>
-                <div id="result">Result</div>
                 <div id="loading" class="loading" style="display: none;">
                     <span class="spinner"></span> Processing...
                 </div>
+                <div id="info" style="display: none; margin-top: 20px;">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Statuses</label><input type="number" id="statuses_count" ></div>
+                        <div class="form-group"><label>Followers</label><input type="number" id="followers_count" readonly></div>
+                        <div class="form-group"><label>Friends</label><input type="number" id="friends_count" readonly></div>
+                        <div class="form-group"><label>Favourites</label><input type="number" id="favourites_count" readonly></div>
+                        <div class="form-group"><label>Listed</label><input type="number" id="listed_count" readonly></div>
+                        <div class="form-group"><label>Language</label><input type="text" id="lang" readonly></div>
+                        <div class="form-group"><label>Time Zone</label><input type="text" id="time_zone" readonly></div>
+                        <div class="form-group"><label>Location</label><input type="text" id="location" readonly></div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label style="margin-top: 15px;">Friends List</label>
+                        <textarea id="friends_list" rows="5" readonly style="width: 100%; font-family: 'Segoe UI', sans-serif;"></textarea>
+                    </div>
+                </div>
+                <div id="result" class="result-box" style="display: none;"></div>
             </form>
         </div>
         <script src="render.js"></script>

@@ -1,27 +1,33 @@
+import pandas as pd
 import matplotlib.pyplot as plt
-from processing import load_users, FriendGraphBuilder, KNNGraphBuilder
+from processing import FriendGraphBuilder, KNNGraphBuilder, dataEncoder, USER_PATHS, USEFUL_COLS
 from GNN import GAT, GCN, GraphSAGE, Predictions
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
 
+# Đọc dữ liệu người dùng và lấy các cột cần thiết
+users_raw = pd.concat([pd.read_csv(path) for path in USER_PATHS], ignore_index=True)
+labels = users_raw['dataset'].apply(lambda x: 0 if x in ['TFP', 'E13', 0] else 1)
+users_raw = users_raw[USEFUL_COLS]
+
 # Hàm tính độ chính xác của dự đoán
-def accuracy(predict, graph):
-    return (predict == graph.y.numpy()).sum() / graph.y.size(0)
+def accuracy(predict):
+    return (predict == labels.to_numpy()).sum() / labels.shape[0]
 
 # Hàm vẽ biểu đồ confusion matrix
 def chart(predictions, name, color, index):
     results = predictions.predict().argmax(dim=1).numpy()
-    cm = confusion_matrix(predictions.graph.y.numpy(), results)
+    cm = confusion_matrix(labels.to_numpy(), results)
     class_names = ['Real', 'Fake']
     plt.subplot(2, 3, index)
     sns.heatmap(cm, annot=True, fmt='d', cmap=color, xticklabels=class_names, yticklabels=class_names)
     plt.xlabel('Predicted Label')
     plt.xticks(rotation=45)
     plt.ylabel('True Label')
-    plt.title(f'{name} {accuracy(results, predictions.graph)*100:.2f}%\n', fontsize=11)
+    plt.title(f'{name} {accuracy(results)*100:.2f}%\n', fontsize=11)
 
 # Tải dữ liệu người dùng và xây dựng đồ thị
-users = load_users()
+users = dataEncoder(users_raw)
 graph = FriendGraphBuilder(users).build_graph()
 graph_knn = KNNGraphBuilder(users).build_graph()
 
