@@ -30,7 +30,7 @@ def findFriends(user_id: int):
 @API.post("/predict")
 def predict(friends: Friends):
     graph = Service.predict(friends.users_id)
-    prediction = Predictions(model, '/model/GraphSAGE.pth', graph).predict()[0]
+    prediction = Predictions(model, './model/GraphSAGE.pth', graph).predict()[0]
     label = prediction.argmax()
     confidence = prediction.max().item()
     return {

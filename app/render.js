@@ -46,8 +46,10 @@ function showPredictionResult(prediction, confidence) {
     resultDiv.style.display = 'block';
     resultDiv.classList.remove('result-real', 'result-fake');
     if (prediction.toLowerCase() === 'real') {
+        resultDiv.style.color = 'green';
         resultDiv.classList.add('result-real');
     } else if (prediction.toLowerCase() === 'fake') {
+        resultDiv.style.color = 'red';
         resultDiv.classList.add('result-fake');
     }
     resultDiv.innerHTML = `<strong>Prediction:</strong> ${prediction} - ${confidence}`;

@@ -69,21 +69,3 @@ class FriendGraphBuilder:
         edge_index = torch.tensor(self.edges[['source_index', 'target_index']].values, dtype=torch.long).t().contiguous()
         edge_index, _ = add_self_loops(edge_index, num_nodes=x.size(0))
         return Data(x=x, edge_index=edge_index)
-
-class KNNGraphBuilder:
-    def __init__(self, users_encoder: pd.DataFrame, n_neighbors = 11):
-        self.users = users_encoder
-        self.n_neighbors = n_neighbors
-
-    def build_graph(self):
-        features = self.users.drop(['id', 'lang', 'time_zone', 'location'], axis=1).values
-        knn = NearestNeighbors(n_neighbors=self.n_neighbors, metric='euclidean').fit(features)
-        _, indices = knn.kneighbors(features)
-        row, col = [], []
-        for i, neighbors in enumerate(indices):
-            for j in neighbors:
-                row.append(i)
-                col.append(j)
-        x = torch.tensor(self.users.drop(['id'], axis=1).values, dtype=torch.float)
-        edge_index = torch.tensor([row, col], dtype=torch.long)
-        return Data(x=x, edge_index=edge_index)

@@ -67,13 +67,6 @@ button:hover {
     background-color: #0056b3;
 }
 
-#result {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 16px;
-    color: green;
-}
-
 .loading {
     margin-top: 15px;
     text-align: center;
@@ -112,12 +105,16 @@ button:hover {
 
 .result-real {
     background-color: #e8f5e9;
-    border: 1px solid #8ad2dbff;
-    color: #04e5ecff;
+    border: 1px solid #66bb6a;
 }
 
 .result-fake {
     background-color: #ffebee;
-    border: 1px solid #ef9a9a;
-    color: #c62828;
+    border: 1px solid #ef5350;
+}
+
+#result {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 16px;
 }
