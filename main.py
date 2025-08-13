@@ -38,5 +38,3 @@ def predict(friends: Friends):
         "prediction": "Fake" if label == 1 else "Real",
         "confidence": f'{confidence * 100:.2f}%'
     }
-
-# uvicorn main:API --reload
