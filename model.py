@@ -1,6 +1,45 @@
 import torch
 import torch.nn.functional as F
 from torch_geometric.nn import GATConv, GCNConv, SAGEConv
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+
+USER_PATHS = [
+    "./cresci-2015/E13/users.csv", 
+    "./cresci-2015/INT/users.csv",
+    "./cresci-2015/TFP/users.csv", 
+    "./cresci-2015/FSF/users.csv",
+    "./cresci-2015/TWT/users.csv"
+]
+
+FRIENDS_PATHS = [
+    "./cresci-2015/E13/friends.csv", 
+    "./cresci-2015/INT/friends.csv",
+    "./cresci-2015/TFP/friends.csv", 
+    "./cresci-2015/FSF/friends.csv",
+    "./cresci-2015/TWT/friends.csv"
+]
+
+USEFUL_COLS = [
+    'id',
+    'statuses_count', 
+    'followers_count', 
+    'friends_count',
+    'favourites_count', 
+    'listed_count', 
+    'lang', 
+    'time_zone',
+    'location'
+]
+
+def encode_users(data: pd.DataFrame):
+    data = data.copy()
+    for col in data.columns:
+        if data[col].dtype == 'object':
+            data[col] = LabelEncoder().fit_transform(data[col].fillna('NaN'))
+        else:
+            data[col] = data[col].fillna(0)
+    return data
 
 # Lớp GAT cho các nhiệm vụ phân loại đồ thị
 class GAT(torch.nn.Module):

@@ -2,49 +2,11 @@ import pandas as pd
 import torch
 from torch_geometric.utils import add_self_loops
 from torch_geometric.data import Data
-from sklearn.preprocessing import LabelEncoder
-from sklearn.neighbors import NearestNeighbors
+from model import FRIENDS_PATHS
 
-USER_PATHS = [
-    "./cresci-2015/E13/users.csv", 
-    "./cresci-2015/INT/users.csv",
-    "./cresci-2015/TFP/users.csv", 
-    "./cresci-2015/FSF/users.csv",
-    "./cresci-2015/TWT/users.csv"
-]
-
-FRIENDS_PATHS = [
-    "./cresci-2015/E13/friends.csv", 
-    "./cresci-2015/INT/friends.csv",
-    "./cresci-2015/TFP/friends.csv", 
-    "./cresci-2015/FSF/friends.csv",
-    "./cresci-2015/TWT/friends.csv"
-]
-
-USEFUL_COLS = [
-    'id',
-    'statuses_count', 
-    'followers_count', 
-    'friends_count',
-    'favourites_count', 
-    'listed_count', 
-    'lang', 
-    'time_zone',
-    'location'
-]
-
-def dataEncoder(data: pd.DataFrame):
-    data = data.copy()
-    for col in data.columns:
-        if data[col].dtype == 'object':
-            data[col] = LabelEncoder().fit_transform(data[col].fillna('NaN'))
-        else:
-            data[col] = data[col].fillna(0)
-    return data
-
-class FriendGraphBuilder:
-    def __init__(self, users_encoder: pd.DataFrame):
-        self.users = users_encoder
+class Graph:
+    def __init__(self, encoded_users: pd.DataFrame):
+        self.users = encoded_users
         self.edges = None
 
     def load_edges(self):
@@ -63,7 +25,7 @@ class FriendGraphBuilder:
         self.edges = edges.astype({'source_index': 'long', 'target_index': 'long'})
         return self.edges
 
-    def build_graph(self):
+    def build(self):
         self.load_edges()
         x = torch.tensor(self.users.drop(['id'], axis=1).values, dtype=torch.float)
         edge_index = torch.tensor(self.edges[['source_index', 'target_index']].values, dtype=torch.long).t().contiguous()

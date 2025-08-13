@@ -1,10 +1,11 @@
 const axios = require('axios');
 
 async function checkUser() {
+    document.getElementById('info').style.display = 'none';
+    document.getElementById('result').style.display = 'none';
     const userId = document.getElementById('user_id').value.trim();
     if (!userId) return alert("Please enter a user ID");
     document.getElementById('loading').style.display = 'flex';
-    document.getElementById('info').style.display = 'none';
     try {
         const userRes = await axios.get(`http://localhost:8000/user/${userId}`);
         const userData = userRes.data;
@@ -35,7 +36,7 @@ async function checkUser() {
         showPredictionResult(prediction, confidence);
     } catch (error) {
         console.error(error);
-        alert("Something went wrong.");
+        alert(error.response.data.detail);
     } finally {
         document.getElementById('loading').style.display = 'none';
     }

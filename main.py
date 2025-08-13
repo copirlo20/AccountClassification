@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from GNN import GraphSAGE, Predictions
+from model import GAT, Predictions
 from fastapi.exceptions import HTTPException
 from service import Service
 from typing import List
 
 API = FastAPI()
-model = GraphSAGE(in_channels=8, hidden_channels=64, num_classes=2)
+service = Service()
+model = GAT(in_channels=8, hidden_channels=64, num_classes=2)
 
 class Friends(BaseModel):
     users_id: List[int]
@@ -14,7 +15,7 @@ class Friends(BaseModel):
 @API.get("/user/{user_id}")
 def findById(user_id: int):
     try:
-        user = Service.findById(user_id)
+        user = service.findById(user_id)
     except IndexError:
         raise HTTPException(status_code=404, detail="User not found")
     return user
@@ -22,15 +23,15 @@ def findById(user_id: int):
 @API.get("/friends/{user_id}")
 def findFriends(user_id: int):
     try:
-        friends = Service.findFriends(user_id)
+        friends = service.findFriends(user_id)
     except IndexError:
         raise HTTPException(status_code=404, detail="Friend not found")
     return friends
 
 @API.post("/predict")
 def predict(friends: Friends):
-    graph = Service.predict(friends.users_id)
-    prediction = Predictions(model, './model/GraphSAGE.pth', graph).predict()[0]
+    graph = service.build_graph(friends.users_id)
+    prediction = Predictions(model, 'model.pth', graph).predict()[0]
     label = prediction.argmax()
     confidence = prediction.max().item()
     return {
@@ -39,25 +40,3 @@ def predict(friends: Friends):
     }
 
 # uvicorn main:API --reload
-
-# class User(BaseModel):
-#     statuses_count: int
-#     followers_count: int
-#     friends_count: int
-#     favourites_count: int
-#     listed_count: int
-#     lang: str
-#     time_zone: str
-#     location: str
-
-# @API.post("/predict")
-# def predict(user: UserInput):
-#     users = load_users(input=user.dict())
-#     graph = FriendGraphBuilder(users).build_graph()
-#     prediction = Predictions(model, './model/GraphSAGE.pth', graph).predict()[-1]
-#     label = prediction.argmax()
-#     confidence = prediction.max().item()
-#     return {
-#         "prediction": "Fake" if label == 1 else "Real",
-#         "confidence": confidence
-#     }

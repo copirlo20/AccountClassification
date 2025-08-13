@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from processing import FriendGraphBuilder, dataEncoder, USER_PATHS, USEFUL_COLS
-from GNN import GAT, GCN, GraphSAGE, Predictions
+from graph import Graph
+from model import USER_PATHS, USEFUL_COLS, encode_users, GAT, GCN, GraphSAGE, Predictions
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
 
@@ -27,8 +27,8 @@ def chart(predictions, name, color, index):
     plt.title(f'{name} {accuracy(results)*100:.2f}%\n', fontsize=11)
 
 # Tải dữ liệu người dùng và xây dựng đồ thị
-users = dataEncoder(users_raw)
-graph = FriendGraphBuilder(users).build_graph()
+users = encode_users(users_raw)
+graph = Graph(users).build()
 
 # Sử dụng các mô hình để dự đoán
 gcnModel = GCN(graph.num_node_features, 64, 2)
