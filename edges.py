@@ -19,7 +19,6 @@ friends = pd.concat([
     pd.read_csv("./cresci-2015/TWT/friends.csv"),
 ], ignore_index=True)
 
-
 edges = pd.concat([
     friends[['source_id', 'target_id']], 
     friends[['target_id', 'source_id']].rename(columns={'target_id': 'source_id', 'source_id': 'target_id'})
@@ -27,6 +26,5 @@ edges = pd.concat([
 edges = edges.drop_duplicates().query("source_id != target_id").reset_index(drop=True)
 edges = edges.merge(users, left_on='source_id', right_on='id').rename(columns={'dataset': 'source_dataset'}).drop(columns='id')
 edges = edges.merge(users, left_on='target_id', right_on='id').rename(columns={'dataset': 'target_dataset'}).drop(columns='id')
-print(edges)
 
 edges.to_csv("./cresci-2015/edges.csv", index=False)

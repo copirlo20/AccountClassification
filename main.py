@@ -9,7 +9,7 @@ API = FastAPI()
 service = Service()
 model = GAT(in_channels=8, hidden_channels=64, num_classes=2)
 
-class Friends(BaseModel):
+class Users(BaseModel):
     users_id: List[int]
 
 @API.get("/user/{user_id}")
@@ -29,8 +29,8 @@ def findFriends(user_id: int):
     return friends
 
 @API.post("/predict")
-def predict(friends: Friends):
-    graph = service.build_graph(friends.users_id)
+def predict(users: Users):
+    graph = service.build_graph(users.users_id)
     prediction = Predictions(model, 'model.pth', graph).predict()[0]
     label = prediction.argmax()
     confidence = prediction.max().item()

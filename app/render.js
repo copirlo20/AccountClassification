@@ -37,8 +37,6 @@ async function checkUser() {
     } catch (error) {
         console.error(error);
         alert(error.response.data.detail);
-    } finally {
-        document.getElementById('loading').style.display = 'none';
     }
 }
 
@@ -54,4 +52,5 @@ function showPredictionResult(prediction, confidence) {
         resultDiv.classList.add('result-fake');
     }
     resultDiv.innerHTML = `<strong>Prediction:</strong> ${prediction} - ${confidence}`;
+    document.getElementById('loading').style.display = 'none';
 }
