@@ -8,35 +8,32 @@ Nghiên cứu và đánh giá các giải pháp mạng nơ-ron đồ thị (Grap
 - **Phân loại tài khoản mạng xã hội:** Xây dựng các mô hình GNN để dự đoán loại tài khoản (Real - Fake).
 - **Tiền xử lý dữ liệu:** Biểu diễn mạng xã hội dưới dạng đồ thị, xác định nút và cạnh, trích xuất đặc trưng.
 - **Huấn luyện và đánh giá mô hình:** Đánh giá qua các chỉ số Accuracy, Precision, Recall, F1-score, AUC-ROC,...
-- **So sánh với phương pháp truyền thống:** XGBoost, AdaBoost, Random Forest, Decision Tree, SVM,...
 
 ## Công cụ và thư viện
 - Python
 - PyTorch / PyTorch Geometric
 - NetworkX, Pandas, NumPy, Scikit-learn
 - Matplotlib, Seaborn
-- gender-guesser (Nếu cần dự đoán giới tính)
 - ipykernel (Nếu cần xuất HTML từ Jupyter Notebook)
 - FastAPI (Cho ứng dụng BackEnd)
 - NodeJs (Cho ứng dụng FrontEnd)
 
 ## Cách chạy
-1. Xem các nghiên cứu:  
-    - Các mô hình GNN trong folder `GNN` (các file `.ipynb`).  
-    - Các phương pháp Machine Learning khác trong folder `MachineLearning` (các file `.ipynb`).
-2. Cài đặt các thư viện cần thiết:  
+1. Quá trình huấn luyện các mô hình GNN được lưu trong folder `GNN` (các file `.ipynb`).
+2. Các mô hình sau huấn luyện được lưu trong folder `model` (các file `.pth`)
+3. Cài đặt các thư viện cần thiết:  
     ```bash
-    pip install torch torch-geometric networkx pandas scikit-learn matplotlib seaborn fastapi uvicorn gender-guesser ipykernel
+    pip install torch torch-geometric networkx scikit-learn matplotlib seaborn fastapi uvicorn ipykernel
     ```
-3. Chạy BackEnd:  
+4. Chạy BackEnd:  
     ```bash
     uvicorn main:API --reload
     ```
-4. Chạy FrontEnd:  
+5. Chạy FrontEnd:  
     ```bash
     cd app
-    # Nếu đây là lần chạy đầu tiên hoặc folder node_modules chưa tồn tại, chạy:
+    # Cài đặt node_modules:
     npm install
-    # Sau đó chạy ứng dụng:
+    # Chạy ứng dụng:
     npm start
     ```

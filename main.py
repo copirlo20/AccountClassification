@@ -31,7 +31,7 @@ def findFriends(user_id: int):
 @API.post("/predict")
 def predict(users: Users):
     graph = service.build_graph(users.users_id)
-    prediction = Predictions(model, 'model.pth', graph).predict()[0]
+    prediction = Predictions(model, './model/GAT.pth', graph).predict()[0]
     label = prediction.argmax()
     confidence = prediction.max().item()
     return {
